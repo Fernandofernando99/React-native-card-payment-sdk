@@ -15,7 +15,15 @@ import SdkCardPayment from "react-native-sdk-card-payment";
 
 // ...
 
-const result = await SdkCardPayment.multiply(3, 7);
+const result = await SdkCardPayment.createSingleUseToken(
+        PUBLISHABLE_KEY,
+        cardNumber,
+        cardExpMonth,
+        cardExpYear,
+        cardCvn,
+        formattedAmount,
+        true
+      );
 ```
 
 ## Contributing
