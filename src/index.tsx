@@ -1,9 +1,10 @@
 import { NativeModules } from 'react-native';
 
 type SdkCardPaymentType = {
-  multiply(a: number, b: number): Promise<number>;
+  createSingleUseToken(publicKey: String, cardNumber: String, cardExpMonth: String, cardExpYear: String, cardCvn: String,  transactionAmount: number, shouldAuthenticate: boolean): Promise<object>;
 };
 
 const { SdkCardPayment } = NativeModules;
+const sdkPackage = { ...SdkCardPayment};
 
-export default SdkCardPayment as SdkCardPaymentType;
+export default sdkPackage as SdkCardPaymentType;

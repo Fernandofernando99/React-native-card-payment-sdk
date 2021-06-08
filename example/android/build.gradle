@@ -3,7 +3,7 @@
 buildscript {
     ext {
         buildToolsVersion = "29.0.2"
-        minSdkVersion = 16
+        minSdkVersion = 21
         compileSdkVersion = 29
         targetSdkVersion = 29
     }
@@ -29,6 +29,14 @@ allprojects {
         maven {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
+        }
+        maven {
+            url "https://cardinalcommerce.bintray.com/android"
+            // replace the test credential if you have your own
+            credentials {
+                username 'cards@cardinalcommerce'
+                password 'd2358b841891b65b0610f7d51361c13bf4915350'
+            }
         }
 
         google()
