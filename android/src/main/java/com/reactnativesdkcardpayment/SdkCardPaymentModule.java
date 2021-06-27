@@ -13,6 +13,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.module.annotations.ReactModule;
 import com.google.gson.Gson;
+import com.xendit.AuthenticationCallback;
+import com.xendit.Models.Authentication;
 import com.xendit.Models.Card;
 import com.xendit.Models.Token;
 import com.xendit.Models.XenditError;
@@ -33,13 +35,6 @@ public class SdkCardPaymentModule extends ReactContextBaseJavaModule {
     @NonNull
     public String getName() {
         return NAME;
-    }
-
-    // Example method
-    // See https://reactnative.dev/docs/native-modules-android
-    @ReactMethod
-    public void multiply(int a, int b, Promise promise) {
-        promise.resolve(a * b);
     }
 
     @ReactMethod
@@ -65,5 +60,49 @@ public class SdkCardPaymentModule extends ReactContextBaseJavaModule {
         });
     }
 
-    public static native int nativeMultiply(int a, int b);
+    @ReactMethod
+    public void createMultiUseToken(String publicKey, String cardNumber, String cardExpMonth, String cardExpYear, String cardCvn, int transactionAmount, boolean shouldAuthenticate, Promise promise) {
+        Xendit xendit = new Xendit(getReactApplicationContext(), publicKey, getCurrentActivity());
+        Card card = new Card(cardNumber, cardExpMonth, cardExpYear, cardCvn);
+        Gson gson = new Gson();
+        xendit.createMultipleUseToken(card, new TokenCallback() {
+            @Override
+            public void onSuccess(Token token) {
+                // Handle successful tokenization
+                String successResult = gson.toJson(token);
+                promise.resolve(successResult);
+            }
+
+            @Override
+            public void onError(XenditError xenditError) {
+                // Handle error
+                System.out.println("Tokenization ERROR " + xenditError.getErrorMessage());
+                String errorResult = gson.toJson(xenditError);
+                promise.resolve(errorResult);
+            }
+        });
+    }
+
+  @ReactMethod
+  public void createAuthentication(String publicKey, String tokenId, int transactionAmount, String currency, Promise promise) {
+    Xendit xendit = new Xendit(getReactApplicationContext(), publicKey, getCurrentActivity());
+    Gson gson = new Gson();
+    xendit.createAuthentication(tokenId, transactionAmount , currency, new AuthenticationCallback() {
+      @Override
+      public void onSuccess(Authentication authentication) {
+        // Handle successful tokenization
+        String successResult = gson.toJson(authentication);
+        promise.resolve(successResult);
+      }
+
+      @Override
+      public void onError(XenditError xenditError) {
+        // Handle error
+        System.out.println("Tokenization ERROR " + xenditError.getErrorMessage());
+        String errorResult = gson.toJson(xenditError);
+        promise.resolve(errorResult);
+      }
+    });
+  }
+
 }
