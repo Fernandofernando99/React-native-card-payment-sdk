@@ -1,6 +1,6 @@
 {
   "name": "react-native-sdk-card-payment",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "React native sdk for handling card payment transaction",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
